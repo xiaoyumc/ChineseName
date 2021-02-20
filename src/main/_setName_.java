@@ -149,6 +149,7 @@ public class _setName_ implements CommandExecutor {
 
         ItemStack card = new ItemStack(Material.NAME_TAG);
         ItemMeta itemMeta = card.getItemMeta();
+        String displayName = config.getString("name");
         itemMeta.setDisplayName(config.getString("name"));
         List<String> lores = config.getStringList("lores");
         itemMeta.setLore(lores);
@@ -178,15 +179,27 @@ public class _setName_ implements CommandExecutor {
                     Inventory inv = p.getInventory();
                 if (p.hasPermission("cn.usecard")) {
                     for (int packet = 0; packet < inv.getSize(); ++packet) {
-                        if (card.equals(inv.getItem(packet))) {
+                        ItemStack item = inv.getItem(packet);
+                        Boolean material = item.getType().equals(Material.NAME_TAG);
+                        if (material) {
+                           Boolean loresRight = item.getItemMeta().getLore().equals(lores);
+                           Boolean displayNameRight = item.getItemMeta().getDisplayName().equals(displayName);
+                           if (loresRight && displayNameRight) {
                                 strings[1] = strings[1].replaceAll("&", "§");
                                 p.setDisplayName(strings[1] + ChatColor.RESET);
                                 p.sendMessage("§e§l你的中文名设置好了： " + ChatColor.RESET + strings[1]);
                                 main.getInstance().getConfig().set(p.getName(), strings[1]);
                                 main.getInstance().saveConfig();
-                                //inv.setItem(inv.getItem(packet).getAmount()-1, card);
-                            }
+                                if (item.getAmount() == 1) {
+                                    inv.setItem(packet, new ItemStack(Material.AIR));
+                                } else {
+                                    ItemStack cardStack = inv.getItem(packet);
+                                    cardStack.setAmount(cardStack.getAmount() - 1);
+                                    inv.setItem(packet, cardStack);
+                                }
+                           }
                         }
+                     }
                     }else {
                     commandSender.sendMessage("§4§l你缺少cn.usecard的权限");
                 }
