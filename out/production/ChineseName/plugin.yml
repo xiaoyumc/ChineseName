@@ -1,0 +1,10 @@
+name: ChineseName
+main: main.main
+version: 2.0
+author: "§b小雨"
+description: "§b§l一款强大的中文名插件"
+commands:
+  cn:
+    description: "使用/cn help 页码 查看帮助"
+
+
