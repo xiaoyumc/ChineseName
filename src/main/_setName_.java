@@ -179,7 +179,7 @@ public class _setName_ implements CommandExecutor {
                     Inventory inv = p.getInventory();
                 if (p.hasPermission("cn.usecard")) {
                     for (int packet = 0; packet < inv.getSize(); ++packet) {
-                        if(inv.getItem(packet).getType() != null) {
+                        if(inv.getItem(packet) != null) {
                             ItemStack item = inv.getItem(packet);
                             Boolean material = item.getType().equals(Material.NAME_TAG);
                             if (material) {
